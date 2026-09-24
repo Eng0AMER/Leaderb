@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> لوحة النتائج | رحّال الوطن </title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #020504;
+      --bg-card: linear-gradient(155deg, #0a1512 0%, #060d0b 55%, #030807 100%);
+      --accent-green: #0d9c6f;
+      --accent-green-bright: #2fbb8a;
+      --accent-emerald-deep: #047857;
+      --accent-gold: #d99f3a;
+      --accent-gold-bright: #e8bb63;
+      --text-main: #eef2f0;
+      --text-muted: #7c8f8a;
+      --border-color: rgba(47, 187, 138, 0.14);
+      --border-card: rgba(255, 255, 255, 0.06);
+      --glow: rgba(47, 187, 138, 0.12);
+    }
+
+    * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+
+    html { -webkit-text-size-adjust: 100%; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    body {
+      background:
+        radial-gradient(900px 500px at 15% -10%, rgba(217, 159, 58, 0.05), transparent 60%),
+        radial-gradient(1100px 650px at 85% 0%, rgba(13, 156, 111, 0.08), transparent 60%),
+        radial-gradient(circle at top center, #071310 0%, var(--bg-primary) 70%);
+      color: var(--text-main);
+      margin: 0;
+      padding: 25px 15px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: 100%;
+      min-width: 0;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    .header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 22px 26px;
+      border-radius: 22px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      flex-wrap: wrap;
+      gap: 15px;
+      overflow: hidden;
+    }
+    .header::before {
+      content: "";
+      position: absolute; inset: 0;
+      padding: 1px;
+      border-radius: 22px;
+      background: linear-gradient(120deg, rgba(47,187,138,.35), rgba(217,159,58,.2) 45%, transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .header-title h1 {
+      margin: 0;
+      font-size: 1.55rem;
+      background: linear-gradient(120deg, var(--accent-gold-bright) 0%, var(--accent-green-bright) 55%, #6ee7b7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .header-title p {
+      margin: 5px 0 0 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--accent-green-bright) 0%, var(--accent-green) 55%, var(--accent-emerald-deep) 100%);
+      color: #022c22;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255,255,255,.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255,255,255,.4);
+    }
+
+    /* Controls Bar (Search & Stats) */
+    .controls-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 16px 22px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-green-bright);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+    }
+
+    .stats-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-card);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .stat-value {
+      color: var(--accent-green-bright);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    section-title {
+      font-size: 1.2rem;
+      color: var(--accent-green-bright);
+      margin: 30px 0 15px 0;
+      font-weight: 700;
+    }
+
+    /* Main Table Container */
+    .table-wrapper {
+      position: relative;
+      background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid var(--border-card);
+      overflow-x: auto;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    th {
+      background: linear-gradient(180deg, #0c1815 0%, #060c0a 100%);
+      padding: 14px 10px;
+      color: var(--accent-green-bright);
+      font-size: 0.85rem;
+      font-weight: 800;
+      border-bottom: 2px solid var(--border-color);
+      position: relative;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+    }
+
+    tbody tr { transition: background .2s ease; }
+    tr:hover {
+      background: linear-gradient(90deg, rgba(13, 156, 111, 0.06), rgba(217, 159, 58, 0.02));
+    }
+
+    /* Badges */
+    .rank-badge {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.9rem;
+      background: #182824;
+      color: var(--text-muted);
+      direction: ltr;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .rank-1 { background: linear-gradient(135deg, var(--accent-gold-bright) 0%, var(--accent-gold) 55%, #d97706 100%); color: #2a1900; box-shadow: 0 0 18px rgba(245, 185, 66, 0.5); border: none; }
+    .rank-2 { background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 55%, #64748b 100%); color: #0f172a; box-shadow: 0 0 14px rgba(148, 163, 184, 0.4); border: none; }
+    .rank-3 { background: linear-gradient(135deg, #d98a4a 0%, #b45309 55%, #78350f 100%); color: #fff; box-shadow: 0 0 14px rgba(180, 83, 9, 0.4); border: none; }
+
+    .twitter-handle {
+      color: #38bdf8;
+      unicode-bidi: isolate;
+      display: inline-block;
+      text-decoration: none;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      max-width: 170px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      transition: all .2s ease;
+    }
+    .twitter-handle:hover { background: rgba(56, 189, 248, 0.16); box-shadow: 0 0 10px rgba(56,189,248,.25); }
+
+    .time-value {
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: normal;
+      font-family: monospace;
+      font-weight: 800;
+      font-size: 1.1rem;
+      direction: ltr;
+      display: inline-block;
+      background: linear-gradient(120deg, var(--accent-green-bright), var(--accent-gold-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-attempt {
+      background: linear-gradient(135deg, rgba(13, 156, 111, 0.16), rgba(13, 156, 111, 0.06));
+      color: var(--accent-green-bright);
+      border: 1px solid rgba(13, 156, 111, 0.22);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .badge-error {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 35px;
+      color: var(--text-muted);
+    }
+
+    .badge-suspicious {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.08));
+      color: var(--accent-gold-bright);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-inline-start: 6px;
+      display: inline-block;
+    }
+
+    .badge-reason {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #f87171 0%, #dc2626 55%, #991b1b 100%);
+      color: #fff;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+    }
+    .btn-delete:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(239,68,68,0.4); }
+
+    /* خانة الاستبعاد اليدوي */
+    .exclude-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      user-select: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.06);
+      transition: all .2s ease;
+      white-space: nowrap;
+    }
+    .exclude-label:hover { color: #f87171; background: rgba(239, 68, 68, 0.14); }
+    .exclude-label input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      cursor: pointer;
+      accent-color: #dc2626;
+    }
+
+    .btn-restore {
+      background: linear-gradient(135deg, var(--accent-green-bright) 0%, var(--accent-green) 55%, var(--accent-emerald-deep) 100%);
+      color: #022c22;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.82rem;
+      margin-inline-end: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-restore:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(16,185,129,0.4); }
+
+    .btn-danger-bulk {
+      background: linear-gradient(135deg, #f87171 0%, #dc2626 55%, #991b1b 100%);
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255,255,255,.25);
+      transition: all 0.25s ease;
+    }
+    .btn-danger-bulk:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,68,68,0.5); }
+
+    /* صف قابل للنقر لعرض كل محاولات اللاعب */
+    tbody tr.clickable-row { cursor: pointer; }
+
+    /* ===== الجوال: نفس شكل الجدول مثل اللابتوب لكن مضغوط (بدون بطاقات كبيرة) ===== */
+    @media (max-width: 1100px) {
+      .table-wrapper { overflow-x: auto; }
+      th { padding: 10px 6px; font-size: 0.78rem; }
+      td { padding: 9px 6px; font-size: 0.85rem; }
+      .hide-md { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 12px 8px; }
+      .container { margin-inline: auto; }
+      .header { flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 16px 12px; }
+      .header-title h1 { font-size: 1.2rem; line-height: 1.5; }
+      .header > div:last-child { justify-content: center; width: 100%; }
+      .header .btn, .header .btn-danger-bulk { flex: 1 1 100%; }
+      .controls-bar { flex-direction: column; align-items: stretch; padding: 12px; }
+      .search-box { min-width: 0; width: 100%; }
+      .stats-info { justify-content: center; gap: 6px; }
+      .section-heading { text-align: center; font-size: 1rem; }
+      .empty-state { text-align: center; }
+
+      th { padding: 8px 3px; font-size: 0.7rem; }
+      td { padding: 8px 3px; font-size: 0.78rem; }
+      .rank-badge { width: 26px; height: 26px; font-size: 0.75rem; }
+      .time-value { font-size: 0.72rem; }
+      .badge-error { min-width: 22px; text-align: center; display: inline-block; }
+      .badge-error, .badge-reason, .badge-suspicious { font-size: 0.68rem; padding: 3px 6px; }
+      .badge-suspicious { margin-inline-start: 0; display: block; width: fit-content; margin-top: 3px; }
+      .twitter-handle { max-width: 84px; font-size: 0.72rem; padding: 3px 6px; }
+      /* خانة الاستبعاد: مربع فقط بدون نص */
+      .exclude-label { font-size: 0; gap: 0; padding: 6px; }
+      .exclude-label input { width: 18px; height: 18px; }
+      /* أعمدة ثانوية تظهر بالضغط على الصف (نافذة المحاولات) */
+      .hide-sm { display: none; }
+      .btn-delete, .btn-restore { padding: 5px 8px; font-size: 0.7rem; margin-inline-end: 3px; }
+    }
+
+    /* ===== نافذة عرض كل محاولات اللاعب ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(3, 8, 6, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 22px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(52,211,153,.08);
+    }
+    .modal-box h3 {
+      margin: 0 0 14px 0;
+      background: linear-gradient(120deg, var(--accent-gold-bright), var(--accent-green-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 1.15rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-close {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; font-size: 1rem;
+      transition: all .2s ease;
+    }
+    .modal-close:hover { background: rgba(239,68,68,.18); }
+    .attempt-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 12px; margin-bottom: 8px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+    .attempt-item.first {
+      border-color: rgba(52,211,153,0.4);
+      background: linear-gradient(120deg, rgba(52,211,153,0.1), rgba(245,185,66,0.05));
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">
+      <h1>🏆 لوحة التحكم والنتائج — رحال الوطن</h1>
+      <p>نادي هندسة الروبوتات | إدارة المسابقة وحصر الفائزين الرسميين</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn" onclick="fetchScores()">تحديث البيانات</button>
+      <button class="btn-danger-bulk" onclick="deleteAllInvalid()">حذف كل المستبعدين نهائياً</button>
+    </div>
+  </div>
+
+  <!-- Controls & Search Bar -->
+  <div class="controls-bar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ابحث بالاسم، حساب X، أو رقم المحاولة..." oninput="filterTables()">
+    </div>
+    <div class="stats-info">
+      <div class="stat-item">
+        <span class="stat-label">المقبولين:</span>
+        <span class="stat-value" id="validCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">محاولة واحدة فقط:</span>
+        <span class="stat-value" id="singleCount" style="color: #38bdf8;">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">المستبعدين:</span>
+        <span class="stat-value" id="invalidCount" style="color: #f87171;">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">أوقات مشبوهة:</span>
+        <span class="stat-value" id="suspiciousCount" style="color: #f59e0b;">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Single-attempt Table (مستوفون للشروط + محاولة واحدة فقط) -->
+  <h3 class="section-heading" style="color: #38bdf8; margin-top: 0; margin-bottom: 10px;">🎯 قائمة اللاعبين ذوي المحاولة الواحدة فقط (المستوفون للشروط)</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 70px; text-align: center;">الترتيب</th>
+          <th>اسم المتنافس</th>
+          <th>زمن الرحلة</th>
+          <th>عدد الأخطاء</th>
+          <th>حساب منصة X</th>
+          <th style="width: 110px; text-align: center;" title="استبعاد المتنافس ونقله لقائمة الاستبعاد">استبعاد</th>
+        </tr>
+      </thead>
+      <tbody id="singleTable">
+        <tr><td colspan="6" class="empty-state">لا يوجد لاعبون بمحاولة واحدة.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Main Table (Valid) -->
+  <h3 class="section-heading" style="color: var(--accent-green-bright); margin-top: 40px; margin-bottom: 10px;">✨ القائمة الرئيسية (المقبولون المستوفون للشروط)</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 70px; text-align: center;">الترتيب</th>
+          <th>اسم المتنافس</th>
+          <th>زمن الرحلة</th>
+          <th class="hide-sm">رقم المحاولة</th>
+          <th class="hide-sm" title="وقت المحاولة الثانية إن وُجدت">المحاولة الثانية</th>
+          <th class="hide-sm">إجمالي المحاولات</th>
+          <th>عدد الأخطاء</th>
+          <th>حساب منصة X</th>
+          <th style="width: 110px; text-align: center;" title="استبعاد المتنافس من القائمة الرئيسية ونقله لقائمة الاستبعاد">استبعاد</th>
+        </tr>
+      </thead>
+      <tbody id="validTable">
+        <tr><td colspan="9" class="empty-state">جاري التحميل...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Excluded Table (Invalid) -->
+  <h3 class="section-heading" style="color: #f87171; margin-top: 40px; margin-bottom: 10px;">⚠️ قائمة الاستبعاد (بدون يوزر X أو مكررين)</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>اسم المتنافس</th>
+          <th>زمن الرحلة</th>
+          <th class="hide-sm">وقت اللعب</th>
+          <th>عدد الأخطاء</th>
+          <th>حساب منصة X المدخل</th>
+          <th>سبب الاستبعاد</th>
+          <th style="width: 170px;"></th>
+        </tr>
+      </thead>
+      <tbody id="invalidTable">
+        <tr><td colspan="7" class="empty-state">لا توجد سجلات مستبعدة.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- نافذة عرض كل محاولات اللاعب -->
+<div class="modal-overlay" id="attemptsModal" onclick="if(event.target===this) closeAttemptsModal()">
+  <div class="modal-box">
+    <h3>
+      <span id="modalTitle">محاولات اللاعب</span>
+      <button class="modal-close" onclick="closeAttemptsModal()">✕</button>
+    </h3>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const firebaseConfig = {
+    databaseURL: "https://rahakalwatan-default-rtdb.firebaseio.com"
+  };
+  
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const database = firebase.database();
+
+  let globalValidData = [];
+  let globalInvalidData = [];
+  let globalAttemptsByUser = {};   // twitterClean -> [كل محاولاته مرتبة زمنياً]
+  let keyToTwitter = {};           // مفتاح السجل بـ Firebase -> حساب X المنظّف (لفتح نافذة المحاولات)
+
+  // أقل وقت ممكن نظرياً لإتمام الرحلة (10 محطات × ~1.2 ثانية حركة+قفل تقريباً).
+  // أي وقت أقل من هذا شبه مستحيل بشرياً ويُعامل كـ"مشبوه" (يُعرض بعلامة تحذير، لا يُحذف تلقائياً).
+  const MIN_PLAUSIBLE_SECONDS = 10;
+
+  function formatTime(seconds) {
+    if (seconds < 60) {
+      return `${seconds.toFixed(2)} s`;
+    } else {
+      let mins = Math.floor(seconds / 60);
+      let secs = Math.floor(seconds % 60);
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+  }
+
+  // توحيد صيغة حساب X: يشيل @، الروابط الكاملة (x.com/ أو twitter.com/)، المسافات، حالة الأحرف
+  function normalizeTwitter(raw) {
+    let s = (raw || "").trim().toLowerCase();
+    if (!s || s === "غير مدخل" || s === "none") return "";
+    s = s.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, "");
+    s = s.replace(/^@/, "");
+    s = s.replace(/\/+$/, "");
+    s = s.replace(/\s+/g, "");
+    return s;
+  }
+
+  function fetchScores() {
+    database.ref('scores').once('value', (snapshot) => {
+      const data = snapshot.val();
+      globalValidData = [];
+      globalInvalidData = [];
+
+      if (!data) {
+        updateStats();
+        renderTables([], []);
+        return;
+      }
+
+      let all = Object.keys(data).map(key => {
+        const player = data[key] || {};
+        const timeVal = parseFloat(player.secs ?? player.time ?? 0) || 0;
+        // ملاحظة مهمة: اللعبة (index.html) تحفظ وقت الإرسال في الحقل "at" وليس "timestamp".
+        // القراءة القديمة من "timestamp" فقط كانت تفشل دائماً وتجعل ترتيب "أول محاولة" غير موثوق.
+        const timestamp = Number(player.at || player.timestamp || 0);
+        // اللعبة الحالية لا ترسل عدد الأخطاء لقاعدة البيانات أصلاً — يبقى null حتى تُضاف لاحقاً في كود اللعبة
+        const errorsVal = (player.errors !== undefined) ? player.errors
+                         : (player.mistakes !== undefined ? player.mistakes : null);
+        const twitterRaw = (player.twitter || "").trim();
+        const twitterClean = normalizeTwitter(twitterRaw);
+        const nameClean = (player.name || "بدون اسم").trim();
+        // بصمة الجهاز: تتطلب تفعيلها في كود اللعبة أولاً (حقل fp أو deviceFp عند إرسال النتيجة).
+        // السجلات القديمة بدون هذا الحقل تُتجاهل بأمان في هذا الفحص فقط، وتبقى خاضعة لبقية الفحوصات.
+        const deviceFp = player.fp || player.deviceFp || null;
+
+        const manualExcluded = player.excluded === true;
+
+        return { key, name: nameClean, secs: timeVal, errors: errorsVal,
+                 twitter: twitterRaw, twitterClean, timestamp, deviceFp, manualExcluded };
+      });
+
+      let userAllAttempts = {};
+      let noTwitter = [];
+
+      all.forEach(r => {
+        if (!r.twitterClean) { noTwitter.push(r); return; }
+        (userAllAttempts[r.twitterClean] ||= []).push(r);
+      });
+
+      globalAttemptsByUser = {};
+      keyToTwitter = {};
+
+      // ١) تصفية التكرار على مستوى حساب X — نحتفظ بأول محاولة زمنياً فقط
+      let firstAttempts = [];
+      Object.entries(userAllAttempts).forEach(([twitterClean, attempts]) => {
+        attempts.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0) || a.key.localeCompare(b.key));
+        attempts.forEach((att, idx) => { att.attemptNumber = idx + 1; });
+        // نلصق وقت المحاولة الثانية (لو موجودة) وإجمالي عدد المحاولات بسجل المحاولة الأولى نفسه
+        attempts[0].secondAttemptSecs = attempts.length > 1 ? attempts[1].secs : null;
+        attempts[0].totalAttempts = attempts.length;
+
+        // الاستبعاد اليدوي: لو أي محاولة لهذا الحساب عليها علامة استبعاد، يُستبعد المتنافس كله
+        if (attempts.some(a => a.manualExcluded)) {
+          attempts[0].reason = "استبعاد يدوي من الإدارة";
+          attempts[0].isManual = true;
+          globalInvalidData.push(attempts[0]);
+        } else {
+          firstAttempts.push(attempts[0]);
+        }
+        globalAttemptsByUser[twitterClean] = attempts;
+        attempts.forEach(att => { keyToTwitter[att.key] = twitterClean; });
+        for (let i = 1; i < attempts.length; i++) {
+          attempts[i].reason = `محاولة مكررة (رقم ${i + 1}) لنفس حساب X`;
+          globalInvalidData.push(attempts[i]);
+        }
+      });
+
+      noTwitter.forEach(r => {
+        r.reason = "بدون حساب X صالح";
+        r.attemptNumber = null;
+        globalInvalidData.push(r);
+      });
+
+      // ٢) كشف نفس الجهاز مستخدم بأكثر من حساب X مختلف (يتطلب حقل fp من كود اللعبة)
+      let byDevice = {};
+      firstAttempts.forEach(r => { if (r.deviceFp) (byDevice[r.deviceFp] ||= []).push(r); });
+      Object.values(byDevice).forEach(group => {
+        if (group.length < 2) return;
+        group.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+        for (let i = 1; i < group.length; i++) {
+          group[i].reason = "نفس بصمة الجهاز مستخدمة لحساب X آخر";
+          globalInvalidData.push(group[i]);
+          firstAttempts = firstAttempts.filter(x => x.key !== group[i].key);
+        }
+      });
+
+      // ٣) علامة تحذير (وليست استبعاد) للأوقات غير المنطقية — تبقى ظاهرة عشان تراجعها بنفسك
+      firstAttempts.forEach(r => { r.suspiciousTime = r.secs > 0 && r.secs < MIN_PLAUSIBLE_SECONDS; });
+
+      firstAttempts.sort((a, b) => a.secs - b.secs);
+      globalValidData = firstAttempts;
+
+      updateStats();
+      renderTables(globalValidData, globalInvalidData);
+    });
+  }
+
+  function updateStats() {
+    document.getElementById("validCount").innerText = globalValidData.length;
+    document.getElementById("invalidCount").innerText = globalInvalidData.length;
+    document.getElementById("singleCount").innerText = globalValidData.filter(r => (r.totalAttempts ?? 1) === 1).length;
+    document.getElementById("suspiciousCount").innerText = globalValidData.filter(r => r.suspiciousTime).length;
+  }
+
+  function deleteRecord(key) {
+    if (!confirm("حذف هذا السجل نهائياً من قاعدة البيانات؟ لا يمكن التراجع.")) return;
+    database.ref('scores/' + key).remove().then(fetchScores);
+  }
+
+  // استبعاد يدوي: يضع علامة excluded على سجل المتنافس في Firebase (لا يحذف شيئاً)
+  function excludeRecord(key, checkbox) {
+    database.ref('scores/' + key + '/excluded').set(true)
+      .then(fetchScores)
+      .catch(err => {
+        if (checkbox) checkbox.checked = false;
+        alert("تعذّر الاستبعاد: " + err.message);
+      });
+  }
+
+  // إعادة المتنافس للقائمة الرئيسية: تشيل العلامة من كل محاولات نفس حساب X
+  function restoreRecord(key) {
+    const twitterClean = keyToTwitter[key];
+    const attempts = twitterClean ? globalAttemptsByUser[twitterClean] : null;
+    const keys = attempts ? attempts.map(a => a.key) : [key];
+    const updates = {};
+    keys.forEach(k => { updates['scores/' + k + '/excluded'] = null; });
+    database.ref().update(updates).then(fetchScores)
+      .catch(err => alert("تعذّرت الإعادة: " + err.message));
+  }
+
+  function deleteAllInvalid() {
+    if (globalInvalidData.length === 0) return;
+    if (!confirm(`سيتم حذف ${globalInvalidData.length} سجل من قائمة المستبعدين نهائياً. متأكد؟`)) return;
+    const updates = {};
+    globalInvalidData.forEach(r => { updates['scores/' + r.key] = null; });
+    database.ref().update(updates).then(fetchScores);
+  }
+
+  function formatPlayedAt(ts) {
+    return ts ? new Date(ts).toLocaleString('ar-SA') : 'غير مسجَّل';
+  }
+
+  function showAttempts(key) {
+    const twitterClean = keyToTwitter[key];
+    let attempts = twitterClean ? globalAttemptsByUser[twitterClean] : null;
+    let title;
+
+    if (attempts && attempts.length) {
+      title = `محاولات ${attempts[0].name} (@${twitterClean}) — ${attempts.length} محاولة`;
+    } else {
+      // لاعب بدون حساب X (أو أي سجل غير مربوط بحساب): نعرض سجله نفسه
+      const rec = globalInvalidData.find(r => r.key === key) || globalValidData.find(r => r.key === key);
+      if (!rec) return;
+      attempts = [Object.assign({}, rec, { attemptNumber: 1 })];
+      title = `${rec.name} — بدون حساب X`;
+    }
+
+    document.getElementById("modalTitle").textContent = title;
+
+    const body = document.getElementById("modalBody");
+    body.innerHTML = attempts.map(a => `
+      <div class="attempt-item ${a.attemptNumber === 1 && twitterClean ? 'first' : ''}">
+        <span>${twitterClean ? `محاولة رقم ${a.attemptNumber}${a.attemptNumber === 1 ? ' (المعتمدة)' : ''}` : 'وقت اللعب'}</span>
+        <span class="time-value">${formatTime(a.secs)}</span>
+        <span style="color: var(--text-muted); font-size: 0.8rem;">
+          ${formatPlayedAt(a.timestamp)}
+        </span>
+      </div>
+    `).join("");
+
+    document.getElementById("attemptsModal").classList.add("open");
+  }
+
+  function closeAttemptsModal() {
+    document.getElementById("attemptsModal").classList.remove("open");
+  }
+
+  function filterTables() {
+    const query = document.getElementById("searchInput").value.trim().toLowerCase();
+
+    const filteredValid = globalValidData.filter(player =>
+      player.name.toLowerCase().includes(query) ||
+      (player.twitterClean || "").includes(query) ||
+      String(player.attemptNumber ?? "").includes(query)
+    );
+
+    const filteredInvalid = globalInvalidData.filter(player =>
+      player.name.toLowerCase().includes(query) ||
+      (player.twitterClean || "").includes(query) ||
+      (player.reason || "").toLowerCase().includes(query)
+    );
+
+    renderTables(filteredValid, filteredInvalid);
+  }
+
+  function renderTables(validData, invalidData) {
+    const validBody = document.getElementById("validTable");
+    const invalidBody = document.getElementById("invalidTable");
+
+    validBody.innerHTML = "";
+    invalidBody.innerHTML = "";
+
+    // رسم جدول المقبولين
+    if (validData.length === 0) {
+      validBody.innerHTML = `<tr><td colspan="9" class="empty-state">لا توجد نتائج مطابقة في القائمة الرئيسية!</td></tr>`;
+    } else {
+      validData.forEach((player, index) => {
+        const rank = index + 1;
+        let rankClass = "rank-badge";
+        if (rank === 1) rankClass += " rank-1";
+        if (rank === 2) rankClass += " rank-2";
+        if (rank === 3) rankClass += " rank-3";
+
+        const twitterDisplay = player.twitterClean
+          ? `<a href="https://x.com/${player.twitterClean}" target="_blank" class="twitter-handle">@${player.twitterClean}</a>`
+          : `<span style="color:#f87171;">—</span>`;
+        const errorsDisplay = `<span class="badge-error">${player.errors ?? 0}</span>`;
+        const timeCell = player.suspiciousTime
+          ? `<span class="time-value">${formatTime(player.secs)}</span><span class="badge-suspicious" title="أقل من ${MIN_PLAUSIBLE_SECONDS} ثوانٍ — شبه مستحيل بشرياً، راجعها يدوياً">⚠ مشبوه</span>`
+          : `<span class="time-value">${formatTime(player.secs)}</span>`;
+        const secondAttemptCell = (player.secondAttemptSecs !== null && player.secondAttemptSecs !== undefined)
+          ? `<span class="time-value" style="color:var(--text-muted); font-size:.95rem;">${formatTime(player.secondAttemptSecs)}</span>`
+          : `<span style="color: var(--text-muted); font-size:.85rem;">لا توجد</span>`;
+        const totalAttemptsCell = `<span class="badge-attempt">${player.totalAttempts ?? 1}</span>`;
+
+        const row = document.createElement("tr");
+        row.className = "clickable-row";
+        row.onclick = () => showAttempts(player.key);
+        row.innerHTML = `
+          <td data-label="الترتيب" style="text-align: center;"><span class="${rankClass}">${rank}</span></td>
+          <td data-label="الاسم"><strong>${player.name}</strong></td>
+          <td data-label="زمن الرحلة">${timeCell}</td>
+          <td class="hide-sm" data-label="رقم المحاولة"><span class="badge-attempt">المحاولة #${player.attemptNumber}</span></td>
+          <td class="hide-sm" data-label="المحاولة الثانية">${secondAttemptCell}</td>
+          <td class="hide-sm" data-label="إجمالي المحاولات">${totalAttemptsCell}</td>
+          <td data-label="الأخطاء">${errorsDisplay}</td>
+          <td data-label="حساب X">${twitterDisplay}</td>
+          <td data-label="استبعاد" style="text-align: center;">
+            <label class="exclude-label" title="استبعاد ${player.name} من القائمة" onclick="event.stopPropagation()">
+              <input type="checkbox" onclick="event.stopPropagation()" onchange="if(this.checked) excludeRecord('${player.key}', this)">
+              استبعاد
+            </label>
+          </td>
+        `;
+        validBody.appendChild(row);
+      });
+    }
+
+    // رسم جدول اللاعبين بمحاولة واحدة فقط (مشتق من المقبولين، فيطبّق نفس الشروط تلقائياً)
+    const singleBody = document.getElementById("singleTable");
+    singleBody.innerHTML = "";
+    const singleData = validData.filter(p => (p.totalAttempts ?? 1) === 1);
+    if (singleData.length === 0) {
+      singleBody.innerHTML = `<tr><td colspan="6" class="empty-state">لا يوجد لاعبون بمحاولة واحدة مطابقون.</td></tr>`;
+    } else {
+      singleData.forEach((player, index) => {
+        const rank = index + 1;
+        let rankClass = "rank-badge";
+        if (rank === 1) rankClass += " rank-1";
+        if (rank === 2) rankClass += " rank-2";
+        if (rank === 3) rankClass += " rank-3";
+
+        const twitterDisplay = `<a href="https://x.com/${player.twitterClean}" target="_blank" class="twitter-handle">@${player.twitterClean}</a>`;
+        const errorsDisplay = `<span class="badge-error">${player.errors ?? 0}</span>`;
+        const timeCell = player.suspiciousTime
+          ? `<span class="time-value">${formatTime(player.secs)}</span><span class="badge-suspicious" title="أقل من ${MIN_PLAUSIBLE_SECONDS} ثوانٍ — شبه مستحيل بشرياً، راجعها يدوياً">⚠ مشبوه</span>`
+          : `<span class="time-value">${formatTime(player.secs)}</span>`;
+
+        const row = document.createElement("tr");
+        row.className = "clickable-row";
+        row.onclick = () => showAttempts(player.key);
+        row.innerHTML = `
+          <td data-label="الترتيب" style="text-align: center;"><span class="${rankClass}">${rank}</span></td>
+          <td data-label="الاسم"><strong>${player.name}</strong></td>
+          <td data-label="زمن الرحلة">${timeCell}</td>
+          <td data-label="الأخطاء">${errorsDisplay}</td>
+          <td data-label="حساب X">${twitterDisplay}</td>
+          <td data-label="استبعاد" style="text-align: center;">
+            <label class="exclude-label" title="استبعاد ${player.name} من القائمة" onclick="event.stopPropagation()">
+              <input type="checkbox" onclick="event.stopPropagation()" onchange="if(this.checked) excludeRecord('${player.key}', this)">
+              استبعاد
+            </label>
+          </td>
+        `;
+        singleBody.appendChild(row);
+      });
+    }
+
+    // رسم جدول المستبعدين
+    if (invalidData.length === 0) {
+      invalidBody.innerHTML = `<tr><td colspan="7" class="empty-state">لا توجد سجلات مستبعدة مطابقة للبحث.</td></tr>`;
+    } else {
+      invalidData.forEach(player => {
+        const twitterDisplay = player.twitterClean
+          ? `<a href="https://x.com/${player.twitterClean}" target="_blank" class="twitter-handle">@${player.twitterClean}</a>`
+          : `<span style="color: #f87171;">مفقود / غير مدخل</span>`;
+        const errorsDisplay = `<span class="badge-error">${player.errors ?? 0}</span>`;
+
+        const row = document.createElement("tr");
+        row.className = "clickable-row";
+        row.onclick = () => showAttempts(player.key);
+        row.innerHTML = `
+          <td data-label="الاسم"><strong>${player.name}</strong></td>
+          <td data-label="زمن الرحلة"><span class="time-value">${formatTime(player.secs)}</span></td>
+          <td class="hide-sm" data-label="وقت اللعب" style="color: var(--text-muted); font-size: .8rem;">${formatPlayedAt(player.timestamp)}</td>
+          <td data-label="الأخطاء">${errorsDisplay}</td>
+          <td data-label="حساب X">${twitterDisplay}</td>
+          <td data-label="السبب"><span class="badge-reason">${player.reason || "—"}</span></td>
+          <td data-label="">${player.isManual ? `<button class="btn-restore" onclick="event.stopPropagation(); restoreRecord('${player.key}')">إعادة للقائمة</button>` : ""}<button class="btn-delete" onclick="event.stopPropagation(); deleteRecord('${player.key}')">حذف</button></td>
+        `;
+        invalidBody.appendChild(row);
+      });
+    }
+  }
+
+  fetchScores();
+</script>
+
+</body>
+</html>
